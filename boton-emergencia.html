@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>c e r p</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0; padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #000000, #2d3291);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      margin-bottom: 40px;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+
+    #btnAyuda {
+      width: 200px;
+      height: 200px;
+      background-image: url('https://cdn-icons-png.flaticon.com/512/6431/6431882.png');
+      background-size: 140px 140px;
+      background-repeat: no-repeat;
+      background-position: center 40px;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding-bottom: 25px;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: white;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
+      transition: transform 0.2s ease;
+      border-radius: 50%;
+      box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
+    }
+
+    #btnAyuda:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(255, 0, 0, 0.9);
+    }
+
+    #opciones {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 30px;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+
+    #opciones.mostrar {
+      display: flex;
+      opacity: 1;
+    }
+
+    button.opcion-btn {
+      background-color: rgba(255, 255, 255, 0.15);
+      border: none;
+      border-radius: 12px;
+      padding: 14px 28px;
+      font-size: 1.2rem;
+      color: #f0f0f5;
+      cursor: pointer;
+      margin: 10px 0;
+      width: 280px;
+      max-width: 90vw;
+      box-shadow: 0 6px 15px rgba(255, 255, 255, 0.1);
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    button.opcion-btn:hover {
+      background-color: rgba(255, 255, 255, 0.35);
+      transform: scale(1.05);
+    }
+
+    #resultado {
+      margin-top: 40px;
+      max-width: 560px;
+      width: 90vw;
+      text-align: center;
+      border-radius: 14px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+      background: rgba(255 255 255 / 0.1);
+      padding: 20px;
+      backdrop-filter: blur(10px);
+    }
+
+    iframe {
+      aspect-ratio: 16/9;
+      width: 100%;
+      max-width: 560px;
+      border-radius: 12px;
+      border: none;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+      margin-top: 15px;
+    }
+
+    #contacto-ayuda {
+      margin-top: 30px;
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      padding: 20px;
+      border-radius: 14px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+      font-size: 1rem;
+      line-height: 1.5;
+      max-width: 560px;
+      width: 90vw;
+    }
+
+    #contacto-ayuda a {
+      color: #ffd6d6;
+      text-decoration: underline;
+    }
+
+    #contacto-ayuda a:hover {
+      color: #ffbaba;
+    }
+
+    @media (max-width: 600px) {
+      iframe {
+        height: auto;
+      }
+      button.opcion-btn {
+        width: 100%;
+      }
+      #btnAyuda {
+        width: 150px;
+        height: 150px;
+        font-size: 1.2rem;
+        padding-bottom: 25px;
+        background-size: 110px 110px;
+        background-position: center 38px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>EMERGENCY</h1>
+
+  <button id="btnAyuda" aria-label="Botón de emergencia"></button>
+
+  <div id="opciones">
+    <button class="opcion-btn" data-tipo="nodoymas">Me siento muy triste 😔</button>
+    <button class="opcion-btn" data-tipo="borde">Estoy nervioso 😬</button>
+    <button class="opcion-btn" data-tipo="random">Necesito distraerme 😂</button>
+  </div>
+
+  <div id="resultado"></div>
+  <div id="contacto-ayuda"></div>
+
+  <script>
+    const videos = {
+      nodoymas: [
+        "https://youtu.be/Jg8zSo1BBP8" // música relajante
+      ],
+      borde: [
+        "https://youtu.be/eoMIDE0sDXU",
+        "https://youtu.be/UgIQRVdLh6M"
+      ],
+      random: [
+        "https://youtu.be/2xzmkx35T2E",
+        "https://youtu.be/v4F0cWrTjBw"
+      ]
+    };
+
+    const btnAyuda = document.getElementById('btnAyuda');
+    const opciones = document.getElementById('opciones');
+    const resultado = document.getElementById('resultado');
+    const contacto = document.getElementById('contacto-ayuda');
+
+    function aEmbedYoutube(url) {
+      let match = url.match(/youtu\.be\/([a-zA-Z0-9_-]+)/);
+      if (match) return "https://www.youtube.com/embed/" + match[1];
+      match = url.match(/[?&]v=([a-zA-Z0-9_-]+)/);
+      if (match) return "https://www.youtube.com/embed/" + match[1];
+      if (url.includes("youtube.com/embed/")) return url;
+      return url;
+    }
+
+    btnAyuda.addEventListener('click', () => {
+      opciones.classList.add("mostrar");
+      resultado.innerHTML = "";
+      contacto.innerHTML = "";
+      btnAyuda.style.display = "none";
+    });
+
+    opciones.addEventListener('click', (e) => {
+      if (e.target.tagName === "BUTTON") {
+        const tipo = e.target.getAttribute('data-tipo');
+        mostrarVideo(tipo);
+      }
+    });
+
+    function mostrarVideo(tipo) {
+      if (videos[tipo] && videos[tipo].length > 0) {
+        const index = Math.floor(Math.random() * videos[tipo].length);
+        const urlEmbed = aEmbedYoutube(videos[tipo][index]);
+        resultado.innerHTML = `<h3>🎬 Aquí tienes algo para ti:</h3>
+          <iframe src="${urlEmbed}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+        
+        if (tipo === "nodoymas") {
+          contacto.innerHTML = `
+            <strong>☎️ Contacto en Uruguay – Línea Vida (Ministerio de Salud Pública)</strong><br>
+            Línea gratuita 24 horas para asistencia emocional y prevención del suicidio:<br><br>
+            📞 <a href="tel:08000767">0800 0767</a><br>
+            📱 <a href="tel:0767">*Desde celular: 0767</a><br><br>
+            Es anónimo, confidencial y está atendido por profesionales de la salud mental.
+          `;
+        } else {
+          contacto.innerHTML = "";
+        }
+      } else {
+        resultado.innerHTML = `<p>No hay videos disponibles para esta opción.</p>`;
+        contacto.innerHTML = "";
+      }
+    }
+  </script>
+</body>
+</html>
+  
